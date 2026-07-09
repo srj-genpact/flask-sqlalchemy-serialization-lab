@@ -56,3 +56,24 @@ class Review(db.Model):
     def __repr__(self):
         return f'<Review {self.id}, {self.comment}>'
 
+
+class CustomerSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+    reviews = fields.Nested('ReviewSchema', many=True, exclude=('customer',))
+
+
+class ItemSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+    price = fields.Float()
+    reviews = fields.Nested('ReviewSchema', many=True, exclude=('item',))
+
+
+class ReviewSchema(Schema):
+    id = fields.Int()
+    comment = fields.Str()
+    customer = fields.Nested('CustomerSchema', exclude=('reviews',))
+    item = fields.Nested('ItemSchema', exclude=('reviews',))
+
+
